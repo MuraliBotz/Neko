@@ -45,7 +45,7 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            position: relative; /* Needed for pseudo-elements */
+            position: relative;
         }
 
         button:hover, a.button:hover {
@@ -178,26 +178,31 @@
         }
 
         function downloadImage() {
-            // Prevent the default behavior of the link
-            event.preventDefault();
+            // Fetch the image as a blob
+            fetch(currentImageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    // Create a link element
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'neko.jpg';
 
-            // Create an anchor element dynamically
-            const link = document.createElement('a');
-            link.href = currentImageUrl;
-            link.download = 'neko.jpg';
+                    // Append the link to the body
+                    document.body.appendChild(link);
 
-            // Append the anchor to the body
-            document.body.appendChild(link);
+                    // Programmatically click the link to trigger the download
+                    link.click();
 
-            // Programmatically click the anchor to trigger the download
-            link.click();
-
-            // Remove the anchor from the document
-            document.body.removeChild(link);
+                    // Remove the link from the document
+                    document.body.removeChild(link);
+                })
+                .catch(error => {
+                    console.error('Error downloading the image:', error);
+                });
         }
 
         downloadButton.addEventListener('mouseover', function() {
-            downloadButton.textContent = 'Downloading....';
+            downloadButton.textContent = 'Downloading...';
             downloadButton.classList.add('hovered');
 
             setTimeout(() => {
