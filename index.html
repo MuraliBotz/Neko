@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Neko Img Generator</title>
+    <style>
+        body {
+            font-family: serif;
+            text-align: center;
+            margin-top: 50px;
+            background: #081b29;
+        }
+
+        h1 {
+            color: white;
+            font-size: 36px;
+            text-shadow: 0 0 10px #f15523, 0 0 20px #ef3224, 0 0 30px #7c3697, 0 0 40px #f15523, 0 0 50px #ef3224, 0 0 60px #7c3697;
+            text-decoration: underline;
+            text-decoration-color: cyan;
+        }
+
+
+
+        #nekoImage {
+            max-width: 80%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        button, a.button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            border: 3px solid orange;
+            border-radius: 75px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative; /* Needed for pseudo-elements */
+        }
+
+        button:hover, a.button:hover {
+            border-color: #FF5F1F;
+            background-color: #FF5F1F;
+        }
+
+        button::before, a.button::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            z-index: -1;
+            background: linear-gradient(90deg, #f15523, #ef3224, #7c3697);
+            background-size: 400%;
+            border-radius: 75px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        button:hover::before, a.button:hover::before {
+            filter: blur(20px);
+            opacity: 1;
+            animation: animate 8s linear infinite;
+        }
+
+        @keyframes animate {
+            0% {
+                background-position: 0%;
+            }
+            100% {
+                background-position: 400%;
+            }
+        }
+
+        #generatingText {
+            display: none;
+            font-size: 20px;
+            color: white;
+            background-color: #CC7722;
+            padding: 10px;
+            border-radius: 5px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: slideDown 1s forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                top: -50px;
+                opacity: 0;
+            }
+            50% {
+                top: 20px;
+                opacity: 1;
+            }
+            100% {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            0% {
+                top: 20px;
+                opacity: 1;
+            }
+            100% {
+                top: -50px;
+                opacity: 0;
+            }
+        }
+
+        #downloadButton {
+            display: none;
+        }
+
+        #downloadButton.hovered {
+            background-color: #FF5F1F;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Neko Image Generator</h1>
+    <div id="generatingText">Generating...</div>
+    <img id="nekoImage" src="" alt="" />
+    <div class="button-container">
+        <button id="generateButton" onclick="generateNeko()">Generate Image</button>
+        <a id="downloadButton" class="button" href="#" download="neko.jpg">Download</a>
+    </div>
+
+    <script>
+        const generatingText = document.getElementById('generatingText');
+        const nekoImage = document.getElementById('nekoImage');
+        const downloadButton = document.getElementById('downloadButton');
+
+        function showGeneratingText() {
+            generatingText.style.display = 'block';
+            generatingText.style.animation = 'slideDown 1s forwards';
+
+            setTimeout(() => {
+                generatingText.style.animation = 'slideUp 1s forwards';
+                setTimeout(() => {
+                    generatingText.style.display = 'none';
+                }, 1000);
+            }, 2000);
+        }
+
+        function generateNeko() {
+            showGeneratingText();
+            fetch('https://nekos.best/api/v2/neko')
+                .then(response => response.json())
+                .then(data => {
+                    const imageUrl = data.results[0].url;
+                    nekoImage.src = imageUrl;
+                    downloadButton.href = imageUrl;
+                    downloadButton.style.display = 'inline-block';
+                })
+                .catch(error => {
+                    console.error('Error fetching Neko image:', error);
+                });
+        }
+
+        downloadButton.addEventListener('mouseover', function() {
+            downloadButton.textContent = 'Downloading.';
+            downloadButton.textContent = 'Downloading....';
+            downloadButton.classList.add('hovered');
+
+            setTimeout(() => {
+                downloadButton.textContent = 'Download';
+                downloadButton.classList.remove('hovered');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
