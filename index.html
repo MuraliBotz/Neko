@@ -178,28 +178,42 @@
         }
 
         function downloadImage() {
-            // Fetch the image as a blob
-            fetch(currentImageUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    // Create a link element
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = 'neko.jpg';
+    if (!currentImageUrl) {
+        console.error('No image URL found');
+        return;
+    }
 
-                    // Append the link to the body
-                    document.body.appendChild(link);
+    fetch(currentImageUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Create a new object URL for the blob
+            const blobUrl = URL.createObjectURL(blob);
+            
+            // Create a temporary download link
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'neko.jpg';
 
-                    // Programmatically click the link to trigger the download
-                    link.click();
+            // Trigger the download by simulating a click
+            document.body.appendChild(link);
+            link.click();
 
-                    // Remove the link from the document
-                    document.body.removeChild(link);
-                })
-                .catch(error => {
-                    console.error('Error downloading the image:', error);
-                });
-        }
+            // Clean up by removing the link and revoking the object URL
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+
+            console.log('Image downloaded successfully');
+        })
+        .catch(error => {
+            console.error('Error downloading the image:', error);
+        });
+}
+
 
         downloadButton.addEventListener('mouseover', function() {
             downloadButton.textContent = 'Downloading...';
