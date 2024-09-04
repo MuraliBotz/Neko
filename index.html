@@ -177,42 +177,31 @@
                 });
         }
 
-        function downloadImage() {
+function downloadImage() {
     if (!currentImageUrl) {
         console.error('No image URL found');
         return;
     }
 
     fetch(currentImageUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.blob();
-        })
+        .then(response => response.blob())
         .then(blob => {
-            // Create a new object URL for the blob
-            const blobUrl = URL.createObjectURL(blob);
-            
-            // Create a temporary download link
             const link = document.createElement('a');
+            const blobUrl = URL.createObjectURL(blob);
+
             link.href = blobUrl;
             link.download = 'neko.jpg';
-
-            // Trigger the download by simulating a click
             document.body.appendChild(link);
             link.click();
-
-            // Clean up by removing the link and revoking the object URL
             document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
 
-            console.log('Image downloaded successfully');
+            URL.revokeObjectURL(blobUrl);
         })
         .catch(error => {
             console.error('Error downloading the image:', error);
         });
 }
+
 
 
         downloadButton.addEventListener('mouseover', function() {
