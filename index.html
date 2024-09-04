@@ -178,11 +178,21 @@
         }
 
         function downloadImage() {
+            // Prevent the default behavior of the link
+            event.preventDefault();
+
+            // Create an anchor element dynamically
             const link = document.createElement('a');
             link.href = currentImageUrl;
             link.download = 'neko.jpg';
+
+            // Append the anchor to the body
             document.body.appendChild(link);
+
+            // Programmatically click the anchor to trigger the download
             link.click();
+
+            // Remove the anchor from the document
             document.body.removeChild(link);
         }
 
