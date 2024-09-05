@@ -144,7 +144,7 @@
     <img id="nekoImage" src="" alt="" />
     <div class="button-container">
         <button id="generateButton" onclick="generateNeko()">Generate Image</button>
-        <a id="downloadButton" class="button" href="#" download="neko.jpg">Download</a>
+        <a id="downloadButton" class="button" href="#" download="neko.jpg">View In High Quality</a>
     </div>
 
     <script>
@@ -180,12 +180,12 @@
         }
 
         downloadButton.addEventListener('mouseover', function() {
-            downloadButton.textContent = 'Downloading.';
-            downloadButton.textContent = 'Downloading....';
+            downloadButton.textContent = '...';
+            downloadButton.textContent = '......';
             downloadButton.classList.add('hovered');
 
             setTimeout(() => {
-                downloadButton.textContent = 'Download';
+                downloadButton.textContent = 'View In High Quality..';
                 downloadButton.classList.remove('hovered');
             }, 3000);
         });
