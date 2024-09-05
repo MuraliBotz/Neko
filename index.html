@@ -20,8 +20,6 @@
             text-decoration-color: cyan;
         }
 
-
-
         #nekoImage {
             max-width: 80%;
             height: auto;
@@ -47,7 +45,7 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            position: relative; /* Needed for pseudo-elements */
+            position: relative;
         }
 
         button:hover, a.button:hover {
@@ -171,8 +169,15 @@
                 .then(data => {
                     const imageUrl = data.results[0].url;
                     nekoImage.src = imageUrl;
+
+                    // Immediately update the href attribute and show the button
                     downloadButton.href = imageUrl;
                     downloadButton.style.display = 'inline-block';
+
+                    // Ensure the high-quality button opens the image correctly
+                    downloadButton.addEventListener('click', function(event) {
+                        window.open(imageUrl, '_blank');
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching Neko image:', error);
@@ -181,7 +186,6 @@
 
         downloadButton.addEventListener('mouseover', function() {
             downloadButton.textContent = '...';
-            downloadButton.textContent = '......';
             downloadButton.classList.add('hovered');
 
             setTimeout(() => {
