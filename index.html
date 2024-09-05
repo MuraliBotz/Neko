@@ -169,8 +169,8 @@
                 .then(data => {
                     const imageUrl = data.results[0].url;
                     nekoImage.src = imageUrl;
-                    downloadButton.href = imageUrl;
-                    downloadButton.style.display = 'inline-block';
+                    downloadButton.href = imageUrl;  // Update the button href immediately
+                    downloadButton.style.display = 'inline-block';  // Show the button immediately
                 })
                 .catch(error => {
                     console.error('Error fetching Neko image:', error);
