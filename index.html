@@ -20,6 +20,8 @@
             text-decoration-color: cyan;
         }
 
+
+
         #nekoImage {
             max-width: 80%;
             height: auto;
@@ -45,7 +47,7 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            position: relative;
+            position: relative; /* Needed for pseudo-elements */
         }
 
         button:hover, a.button:hover {
@@ -142,7 +144,7 @@
     <img id="nekoImage" src="" alt="" />
     <div class="button-container">
         <button id="generateButton" onclick="generateNeko()">Generate Image</button>
-        <a id="downloadButton" class="button" href="#" target="_blank">View In High Quality</a>
+        <a id="downloadButton" class="button" href="#" download="neko.jpg">Download</a>
     </div>
 
     <script>
@@ -169,8 +171,8 @@
                 .then(data => {
                     const imageUrl = data.results[0].url;
                     nekoImage.src = imageUrl;
-                    downloadButton.href = imageUrl;  // Update the button href immediately
-                    downloadButton.style.display = 'inline-block';  // Show the button immediately
+                    downloadButton.href = imageUrl;
+                    downloadButton.style.display = 'inline-block';
                 })
                 .catch(error => {
                     console.error('Error fetching Neko image:', error);
@@ -178,11 +180,12 @@
         }
 
         downloadButton.addEventListener('mouseover', function() {
-            downloadButton.textContent = '....';
+            downloadButton.textContent = 'Downloading.';
+            downloadButton.textContent = 'Downloading....';
             downloadButton.classList.add('hovered');
 
             setTimeout(() => {
-                downloadButton.textContent = 'View In High Quality';
+                downloadButton.textContent = 'Download';
                 downloadButton.classList.remove('hovered');
             }, 3000);
         });
